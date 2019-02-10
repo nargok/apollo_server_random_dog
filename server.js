@@ -20,7 +20,7 @@ class DogAPI extends RESTDataSource {
   }
 
   async getRandomDog() {
-    return await this.get("breeds/image/rondom")
+    return await this.get("breeds/image/random");
   }
 
   async getAllBreeds() {
@@ -28,7 +28,7 @@ class DogAPI extends RESTDataSource {
     return Object.keys(res.message);
   }
 
-  async getRanodmDogByBreed(breed) {
+  async getRandomDogByBreed(breed) {
     const breeds = await this.getAllBreeds();
     if (!breeds.includes(breed)) return { status: "error: unknown breed" };
 
@@ -39,7 +39,7 @@ class DogAPI extends RESTDataSource {
     const index = Math.floor(Math.random() * res.message.length);
     return {
       message: res.message[index],
-      status: res,status
+      status: res.status
     };
   }
 }
@@ -57,7 +57,7 @@ const resolvers = {
   Dog: {
     image: ({ message }) => message
   }
-}
+};
 
 const server = new ApolloServer({
   typeDefs,
