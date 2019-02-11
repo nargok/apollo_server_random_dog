@@ -5,10 +5,16 @@ const typeDefs = gql`
   type Query {
     randomDog: Dog
     breed(name: String!): Dog
+    huskyCrazy: HuskyList
   }
 
   type Dog {
     image: String
+    status: String!
+  }
+
+  type HuskyList {
+    images: [String]
     status: String!
   }
 `;
@@ -42,6 +48,14 @@ class DogAPI extends RESTDataSource {
       status: res.status
     };
   }
+
+  async getAllHusky() {
+    const res = await this.get('breed/husky/images');
+    return {
+      images: res.message,
+      status: res.status
+    }
+  }
 }
 
 const resolvers = {
@@ -52,6 +66,9 @@ const resolvers = {
     breed: async (parent, { name }, { dataSources }) => {
       const breed = name.replace(/\s+/g, ""); // remove space
       return dataSources.dogAPI.getRandomDogByBreed(breed);
+    },
+    huskyCrazy: async (parent, args, { dataSources }) => {
+      return dataSources.dogAPI.getAllHusky();
     }
   },
   Dog: {
